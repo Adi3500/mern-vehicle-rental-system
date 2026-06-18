@@ -112,11 +112,26 @@ export default function VehicleDetailPage() {
         const showCustomerOnlyMessage = isAuthenticated && user?.role !== 'customer';
         const overviewItems = [
             { label: 'Make & model', value: [vehicle.make, vehicle.model].filter(Boolean).join(' ') || 'N/A' },
+            { label: 'Year', value: vehicle.year || 'N/A' },
+            { label: 'Color', value: vehicle.color || 'N/A' },
+            { label: 'License plate', value: vehicle.licensePlate || 'N/A' },
+            { label: 'Registration no.', value: vehicle.registrationNumber || 'N/A' },
+            { label: 'Registration expiry', value: vehicle.registrationExpiryDate ? formatDate(vehicle.registrationExpiryDate) : 'N/A' },
             { label: 'Transmission', value: vehicle.transmission || 'N/A' },
             { label: 'Fuel type', value: vehicle.fuelType || 'N/A' },
             { label: 'Seats', value: vehicle.seats || 'N/A' },
             { label: 'Category', value: vehicle.category?.name || 'Vehicle' },
+            { label: 'Price per hour', value: vehicle.pricePerHour ? formatCurrency(vehicle.pricePerHour) : 'N/A' },
+            { label: 'Total bookings', value: vehicle.totalBookings || 0 },
             { label: 'Status', value: vehicle.status },
+        ];
+
+        const locationItems = [
+            { label: 'Address', value: vehicle.location?.address || 'N/A' },
+            { label: 'City', value: vehicle.location?.city || 'N/A' },
+            { label: 'State', value: vehicle.location?.state || 'N/A' },
+            { label: 'Country', value: vehicle.location?.country || 'N/A' },
+            { label: 'ZIP / Postal code', value: vehicle.location?.zipCode || 'N/A' },
         ];
 
         return (<div className = "page-container"><div className = "page-header"><h1> { vehicle.title } </h1><p> { vehicle.description } </p></div><section className = "vehicle-detail__hero"><div className = "vehicle-detail__main-column"><div className = "card"><VehicleGallery images = { vehicle.images }
@@ -124,6 +139,12 @@ export default function VehicleDetailPage() {
                     { marginBottom: '1rem' }
                 }> Vehicle Overview </h3><div className = "vehicle-detail__facts"> {
                     overviewItems.map((item) => (<div key = { item.label }
+                        className = "vehicle-detail__fact"><span> { item.label } </span><strong> { item.value } </strong></div>
+                    ))
+                } </div></div><div className = "card"><h3 style = {
+                    { marginBottom: '1rem' }
+                }> Location Details </h3><div className = "vehicle-detail__facts"> {
+                    locationItems.map((item) => (<div key = { item.label }
                         className = "vehicle-detail__fact"><span> { item.label } </span><strong> { item.value } </strong></div>
                     ))
                 } </div></div><div className = "card"><h3 style = {

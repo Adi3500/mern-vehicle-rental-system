@@ -19,7 +19,7 @@ const {
     vehicleQuerySchema,
 } = require('../validations/vehicle.validation');
 const { createReviewSchema, updateReviewSchema } = require('../validations/review.validation');
-const { uploadVehicleImages } = require('../config/cloudinary');
+const { uploadVehicleAssets } = require('../config/cloudinary');
 
 const parseVehicleMultipartFields = (req, _res, next) => {
     try {
@@ -147,7 +147,10 @@ hostVehicleRouter.get(
 
 hostVehicleRouter.post(
     '/',
-    uploadVehicleImages.array('images', 10),
+    uploadVehicleAssets.fields([
+        { name: 'images', maxCount: 10 },
+        { name: 'licenseDocument', maxCount: 1 },
+    ]),
     parseVehicleMultipartFields,
     validate(createVehicleSchema),
     vehicleCtrl.createVehicle
@@ -155,7 +158,10 @@ hostVehicleRouter.post(
 
 hostVehicleRouter.put(
     '/:id',
-    uploadVehicleImages.array('images', 10),
+    uploadVehicleAssets.fields([
+        { name: 'images', maxCount: 10 },
+        { name: 'licenseDocument', maxCount: 1 },
+    ]),
     parseVehicleMultipartFields,
     validate(updateVehicleSchema),
     vehicleCtrl.updateVehicle

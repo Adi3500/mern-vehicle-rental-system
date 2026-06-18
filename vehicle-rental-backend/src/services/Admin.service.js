@@ -171,11 +171,14 @@ exports.getDashboardStats = async() => {
         { $sort: { '_id.year': 1, '_id.month': 1 } },
     ]);
 
+    const platformFees = revenue.serviceFees || 0;
+    const hostPayouts = Math.max((revenue.total || 0) - platformFees, 0);
+
     return {
         users: { total: totalUsers, hosts: totalHosts, customers: totalCustomers, pendingHosts },
         vehicles: { total: totalVehicles, active: activeVehicles },
         bookings: { total: totalBookings, completed: completedBookings, cancelled: cancelledBookings },
-        revenue: { total: revenue.total, platformFees: revenue.serviceFees },
+        revenue: { total: revenue.total || 0, platformFees, hostPayouts },
         bookingsByMonth,
     };
 };

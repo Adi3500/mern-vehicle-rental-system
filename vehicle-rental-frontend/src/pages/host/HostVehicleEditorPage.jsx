@@ -21,6 +21,10 @@ const toFormData = (payload) => {
             value.forEach((file) => { if (file instanceof File) formData.append('images', file); });
             return;
         }
+        if (key === 'licenseDocument') {
+            if (value instanceof File) formData.append('licenseDocument', value);
+            return;
+        }
         formData.append(key, value);
     });
     return formData;

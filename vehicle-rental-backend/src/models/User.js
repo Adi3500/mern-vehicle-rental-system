@@ -34,6 +34,11 @@ const userSchema = new mongoose.Schema({
         trim: true,
         match: [/^\S+@\S+\.\S+$/, 'Please provide a valid email'],
     },
+    isEmailVerified: {
+        type: Boolean,
+        default: false,
+    },
+    emailVerifiedAt: { type: Date },
     password: {
         type: String,
         required: [true, 'Password is required'],
@@ -61,6 +66,28 @@ const userSchema = new mongoose.Schema({
         country: { type: String },
         zipCode: { type: String },
     },
+    driversLicense: {
+        licenseNumber: {
+            type: String,
+            trim: true,
+            uppercase: true,
+            default: '',
+            match: [/^[A-Z]{2}[0-9]{2}[ -]?[0-9]{11}$/, 'Please provide a valid driver license number'],
+        },
+        issuingState: { type: String, trim: true, default: '' },
+        expiryDate: { type: Date, default: null },
+        imageUrl: { type: String, default: '' },
+        imagePublicId: { type: String, default: '' },
+        status: {
+            type: String,
+            enum: ['not_submitted', 'pending', 'approved', 'rejected'],
+            default: 'not_submitted',
+        },
+        submittedAt: { type: Date, default: null },
+        reviewedAt: { type: Date, default: null },
+        verifiedAt: { type: Date, default: null },
+        reviewNotes: { type: String, trim: true, default: '' },
+    },
     // Host-specific
     isApproved: {
         type: Boolean,
@@ -84,13 +111,14 @@ const userSchema = new mongoose.Schema({
     // Password reset
     passwordResetToken: { type: String, select: false },
     passwordResetExpires: { type: Date, select: false },
+    emailVerificationToken: { type: String, select: false },
+    emailVerificationExpires: { type: Date, select: false },
 
     // Earnings (Host)
     totalEarnings: { type: Number, default: 0 },
 }, { timestamps: true });
 
 // ── Indexes ─────────────────────────────────────────────────────────────────
-userSchema.index({ email: 1 });
 userSchema.index({ role: 1, isApproved: 1 });
 
 // ── Pre-save: hash password ──────────────────────────────────────────────────

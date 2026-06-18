@@ -94,7 +94,7 @@ exports.listVehicles = async(queryParams) => {
         sort,
         populate: [
             { path: 'category', select: 'name icon' },
-            { path: 'host', select: 'name avatar averageRating' },
+            { path: 'host', select: 'name avatar totalEarnings isEmailVerified driversLicense.status' },
         ],
     });
 };
@@ -105,7 +105,7 @@ exports.listVehicles = async(queryParams) => {
 exports.getVehicleById = async(vehicleId) => {
     const vehicle = await Vehicle.findById(vehicleId)
         .populate('category', 'name icon')
-        .populate('host', 'name avatar phone totalEarnings');
+        .populate('host', 'name avatar phone totalEarnings isEmailVerified driversLicense.status');
 
     if (!vehicle) throw new AppError('Vehicle not found.', 404);
     return vehicle;
@@ -114,9 +114,23 @@ exports.getVehicleById = async(vehicleId) => {
 /**
  * Create a new vehicle (Host only).
  */
-exports.createVehicle = async(hostId, data, files = []) => {
+exports.createVehicle = async(hostId, data, files = {}) => {
     const normalizedData = normalizeVehiclePayload(data);
-    const images = files.map((file) => buildUploadedFileMeta(file, 'vehicles'));
+    const images = (files.images || []).map((file) => buildUploadedFileMeta(file, 'vehicles'));
+
+    if (files.licenseDocument?.[0]) {
+        const licenseFile = buildUploadedFileMeta(files.licenseDocument[0], 'verification');
+        normalizedData.vehicleLicense = {
+            ...(normalizedData.vehicleLicense || {}),
+            imageUrl: licenseFile.url,
+            imagePublicId: licenseFile.publicId,
+            status: 'pending',
+            submittedAt: new Date(),
+            reviewedAt: null,
+            verifiedAt: null,
+            reviewNotes: '',
+        };
+    }
 
     const vehicle = await Vehicle.create({...normalizedData, host: hostId, images });
     return vehicle;
@@ -125,7 +139,7 @@ exports.createVehicle = async(hostId, data, files = []) => {
 /**
  * Update an existing vehicle. Only the owning host (or admin) may update.
  */
-exports.updateVehicle = async(vehicleId, requesterId, requesterRole, updates, files = []) => {
+exports.updateVehicle = async(vehicleId, requesterId, requesterRole, updates, files = {}) => {
     const vehicle = await Vehicle.findById(vehicleId);
     if (!vehicle) throw new AppError('Vehicle not found.', 404);
 
@@ -136,9 +150,24 @@ exports.updateVehicle = async(vehicleId, requesterId, requesterRole, updates, fi
     const normalizedUpdates = normalizeVehiclePayload(updates);
 
     // Append new images if uploaded
-    if (files.length > 0) {
-        const newImages = files.map((file) => buildUploadedFileMeta(file, 'vehicles'));
+    if ((files.images || []).length > 0) {
+        const newImages = files.images.map((file) => buildUploadedFileMeta(file, 'vehicles'));
         normalizedUpdates.images = [...vehicle.images, ...newImages];
+    }
+
+    if (files.licenseDocument?.[0]) {
+        const licenseFile = buildUploadedFileMeta(files.licenseDocument[0], 'verification');
+        normalizedUpdates.vehicleLicense = {
+            ...(vehicle.vehicleLicense?.toObject?.() || vehicle.vehicleLicense || {}),
+            ...(normalizedUpdates.vehicleLicense || {}),
+            imageUrl: licenseFile.url,
+            imagePublicId: licenseFile.publicId,
+            status: 'pending',
+            submittedAt: new Date(),
+            reviewedAt: null,
+            verifiedAt: null,
+            reviewNotes: '',
+        };
     }
 
     Object.assign(vehicle, normalizedUpdates);

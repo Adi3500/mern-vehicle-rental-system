@@ -62,7 +62,27 @@ const vehicleSchema = new mongoose.Schema({
     model: { type: String, trim: true }, // e.g. Camry
     year: { type: Number },
     color: { type: String, trim: true },
-    licensePlate: { type: String, trim: true },
+    licensePlate: {
+        type: String,
+        trim: true,
+        uppercase: true,
+        match: [/^[A-Z]{2}[ -]?[0-9]{1,2}[ -]?[A-Z]{1,3}[ -]?[0-9]{1,4}$/, 'Please provide a valid vehicle license plate'],
+    },
+    registrationNumber: { type: String, trim: true, default: '' },
+    registrationExpiryDate: { type: Date, default: null },
+    vehicleLicense: {
+        imageUrl: { type: String, default: '' },
+        imagePublicId: { type: String, default: '' },
+        status: {
+            type: String,
+            enum: ['not_submitted', 'pending', 'approved', 'rejected'],
+            default: 'not_submitted',
+        },
+        submittedAt: { type: Date, default: null },
+        reviewedAt: { type: Date, default: null },
+        verifiedAt: { type: Date, default: null },
+        reviewNotes: { type: String, trim: true, default: '' },
+    },
 
     pricePerDay: {
         type: Number,

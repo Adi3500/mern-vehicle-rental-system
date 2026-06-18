@@ -1,109 +1,69 @@
-/**
- * @swagger
- * tags:
- *   name: Auth
- *   description: Authentication endpoints
- */
 const express = require('express');
 const router = express.Router();
 const authCtrl = require('../controllers/auth.controller');
+const AppError = require('../utils/AppError');
 const { protect } = require('../middleware/auth.middleware');
 const validate = require('../middleware/validate.middleware');
 const { authLimiter } = require('../middleware/rateLimiter.middleware');
 const {
     registerSchema,
     loginSchema,
+    updateProfileSchema,
     updatePasswordSchema,
 } = require('../validations/auth.validation');
-const { uploadAvatar } = require('../config/cloudinary');
+const { uploadProfileAssets } = require('../config/cloudinary');
 
-/**
- * @swagger
- * /api/auth/register:
- *   post:
- *     tags: [Auth]
- *     summary: Register a new user
- *     security: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [name, email, password, confirmPassword]
- *             properties:
- *               name:            { type: string }
- *               email:           { type: string }
- *               password:        { type: string }
- *               confirmPassword: { type: string }
- *               role:            { type: string, enum: [customer, host] }
- *     responses:
- *       201: { description: User registered }
- *       409: { description: Email already exists }
- */
+const parseProfileMultipartFields = (req, _res, next) => {
+    try {
+        if (typeof req.body.address === 'string' && req.body.address.trim()) {
+            req.body.address = JSON.parse(req.body.address);
+        }
+
+        if (typeof req.body.driversLicense === 'string' && req.body.driversLicense.trim()) {
+            req.body.driversLicense = JSON.parse(req.body.driversLicense);
+        }
+
+        next();
+    } catch {
+        next(new AppError('Profile form data is invalid. Please review address and license details.', 400));
+    }
+};
+
+const requireLicenseMetadata = (req, _res, next) => {
+    if (!req.files?.licenseDocument?.[0]) return next();
+
+    const license = req.body.driversLicense || {};
+    if (!license.licenseNumber || !license.expiryDate) {
+        return next(new AppError('Driver license number and expiry date are required with a license document.', 400));
+    }
+
+    next();
+};
+
 router.post('/register', authLimiter, validate(registerSchema), authCtrl.register);
-
-/**
- * @swagger
- * /api/auth/login:
- *   post:
- *     tags: [Auth]
- *     summary: Login
- *     security: []
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             required: [email, password]
- *             properties:
- *               email:    { type: string }
- *               password: { type: string }
- *     responses:
- *       200: { description: Login successful, returns accessToken }
- *       401: { description: Invalid credentials }
- */
 router.post('/login', authLimiter, validate(loginSchema), authCtrl.login);
-
-/**
- * @swagger
- * /api/auth/refresh:
- *   post:
- *     tags: [Auth]
- *     summary: Refresh access token
- *     security: []
- *     responses:
- *       200: { description: New access token }
- */
 router.post('/refresh', authCtrl.refresh);
-
-/**
- * @swagger
- * /api/auth/logout:
- *   post:
- *     tags: [Auth]
- *     summary: Logout
- *     responses:
- *       200: { description: Logged out }
- */
+router.get('/verify-email', authCtrl.verifyEmail);
+router.post('/resend-verification', authCtrl.resendVerification);
 router.post('/logout', protect, authCtrl.logout);
-
-/**
- * @swagger
- * /api/auth/me:
- *   get:
- *     tags: [Auth]
- *     summary: Get current user profile
- *     responses:
- *       200: { description: Current user }
- */
 router.get('/me', protect, authCtrl.getMe);
 
 router.patch(
     '/update-profile',
     protect,
-    uploadAvatar.single('avatar'),
+    uploadProfileAssets.fields([
+        { name: 'avatar', maxCount: 1 },
+        { name: 'licenseDocument', maxCount: 1 },
+    ]),
+    (req, _res, next) => {
+        if (req.files?.avatar?.[0]) {
+            req.file = req.files.avatar[0];
+        }
+        next();
+    },
+    parseProfileMultipartFields,
+    requireLicenseMetadata,
+    validate(updateProfileSchema),
     authCtrl.updateProfile
 );
 

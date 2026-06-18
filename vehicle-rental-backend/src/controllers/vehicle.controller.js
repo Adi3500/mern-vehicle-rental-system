@@ -24,7 +24,7 @@ exports.getVehicle = catchAsync(async(req, res) => {
  * @access  Private (Host)
  */
 exports.createVehicle = catchAsync(async(req, res) => {
-    const vehicle = await vehicleService.createVehicle(req.user._id, req.body, req.files || []);
+    const vehicle = await vehicleService.createVehicle(req.user._id, req.body, req.files || {});
     res.status(201).json({ status: 'success', data: { vehicle } });
 });
 
@@ -38,7 +38,7 @@ exports.updateVehicle = catchAsync(async(req, res) => {
         req.user._id,
         req.user.role,
         req.body,
-        req.files || []
+        req.files || {}
     );
     res.status(200).json({ status: 'success', data: { vehicle } });
 });

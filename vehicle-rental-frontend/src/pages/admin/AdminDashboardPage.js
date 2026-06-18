@@ -35,7 +35,7 @@ const dashboardCards = (dashboard) => [
   {
     label: 'Revenue',
     value: formatCurrency(dashboard.revenue?.total || 0),
-    hint: `Platform fees ${formatCurrency(dashboard.revenue?.platformFees || 0)}`,
+    hint: `Fees ${formatCurrency(dashboard.revenue?.platformFees || 0)} / Host payouts ${formatCurrency(dashboard.revenue?.hostPayouts || 0)}`,
     icon: <DollarSign size={18} />,
   },
 ];
@@ -154,6 +154,10 @@ export default function AdminDashboardPage() {
             <div className="admin-summary-row">
               <span>Platform fees collected</span>
               <strong>{formatCurrency(dashboard.revenue?.platformFees || 0)}</strong>
+            </div>
+            <div className="admin-summary-row">
+              <span>Host payouts earned</span>
+              <strong>{formatCurrency(dashboard.revenue?.hostPayouts || 0)}</strong>
             </div>
           </div>
         </div>

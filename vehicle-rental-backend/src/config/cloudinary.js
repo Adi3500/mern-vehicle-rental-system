@@ -8,8 +8,9 @@ const multer = require('multer');
 const uploadsRoot = path.join(process.cwd(), 'uploads');
 const vehicleUploadsDir = path.join(uploadsRoot, 'vehicles');
 const avatarUploadsDir = path.join(uploadsRoot, 'avatars');
+const verificationUploadsDir = path.join(uploadsRoot, 'verification');
 
-[uploadsRoot, vehicleUploadsDir, avatarUploadsDir].forEach((dir) => {
+[uploadsRoot, vehicleUploadsDir, avatarUploadsDir, verificationUploadsDir].forEach((dir) => {
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
     }
@@ -44,6 +45,16 @@ const buildDiskStorage = (targetDir) =>
         },
     });
 
+const buildDiskStorageByField = (fieldDirectoryMap, fallbackDir) =>
+    multer.diskStorage({
+        destination: (_req, file, cb) => cb(null, fieldDirectoryMap[file.fieldname] || fallbackDir),
+        filename: (_req, file, cb) => {
+            const extension = path.extname(file.originalname || '').toLowerCase();
+            const safeExtension = extension || '.jpg';
+            cb(null, `${Date.now()}-${crypto.randomUUID()}${safeExtension}`);
+        },
+    });
+
 const vehicleStorage = new CloudinaryStorage({
     cloudinary,
     params: {
@@ -62,17 +73,72 @@ const avatarStorage = new CloudinaryStorage({
     },
 });
 
-const createUploader = (storage) => multer({
+const verificationStorage = new CloudinaryStorage({
+    cloudinary,
+    params: {
+        folder: 'vehicle-rental/verification',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'pdf'],
+        resource_type: 'auto',
+    },
+});
+
+const vehicleAssetStorage = new CloudinaryStorage({
+    cloudinary,
+    params: async(_req, file) => {
+        if (file.fieldname === 'licenseDocument') {
+            return {
+                folder: 'vehicle-rental/verification',
+                allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+                resource_type: 'image',
+            };
+        }
+
+        return {
+            folder: 'vehicle-rental/vehicles',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+            transformation: [{ width: 1200, height: 800, crop: 'limit', quality: 'auto' }],
+        };
+    },
+});
+
+const profileAssetStorage = new CloudinaryStorage({
+    cloudinary,
+    params: async(_req, file) => {
+        if (file.fieldname === 'licenseDocument') {
+            return {
+                folder: 'vehicle-rental/verification',
+                allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+                resource_type: 'image',
+            };
+        }
+
+        return {
+            folder: 'vehicle-rental/avatars',
+            allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+            transformation: [{ width: 200, height: 200, crop: 'fill', gravity: 'face' }],
+        };
+    },
+});
+
+const createUploader = (storage, allowedMimePatterns = [/^image\//]) => multer({
     storage,
     limits: { fileSize: 5 * 1024 * 1024 },
     fileFilter: (_req, file, cb) => {
-        if (file.mimetype.startsWith('image/')) return cb(null, true);
-        cb(new Error('Only image files are allowed'), false);
+        if (allowedMimePatterns.some((pattern) => pattern.test(file.mimetype))) {
+            return cb(null, true);
+        }
+        cb(new Error('Only supported verification files are allowed'), false);
     },
 });
 
 const uploadVehicleImages = createUploader(
     isCloudinaryEnabled ? vehicleStorage : buildDiskStorage(vehicleUploadsDir)
+);
+
+const uploadVehicleAssets = createUploader(
+    isCloudinaryEnabled ?
+        vehicleAssetStorage :
+        buildDiskStorageByField({ licenseDocument: verificationUploadsDir }, vehicleUploadsDir)
 );
 
 const uploadAvatar = multer({
@@ -83,6 +149,17 @@ const uploadAvatar = multer({
         cb(new Error('Only image files are allowed'), false);
     },
 });
+
+const uploadProfileAssets = createUploader(
+    isCloudinaryEnabled ?
+        profileAssetStorage :
+        buildDiskStorageByField({ avatar: avatarUploadsDir, licenseDocument: verificationUploadsDir }, avatarUploadsDir)
+);
+
+const uploadVerificationDocument = createUploader(
+    isCloudinaryEnabled ? verificationStorage : buildDiskStorage(verificationUploadsDir),
+    [/^image\//, /^application\/pdf$/]
+);
 
 const buildUploadedFileMeta = (file, folder) => {
     if (isCloudinaryEnabled) {
@@ -126,7 +203,10 @@ const destroyUploadedFile = async(publicId) => {
 module.exports = {
     cloudinary,
     uploadVehicleImages,
+    uploadVehicleAssets,
     uploadAvatar,
+    uploadProfileAssets,
+    uploadVerificationDocument,
     uploadsRoot,
     isCloudinaryEnabled,
     buildUploadedFileMeta,

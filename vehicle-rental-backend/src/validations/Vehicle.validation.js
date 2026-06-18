@@ -1,5 +1,7 @@
 const Joi = require('joi');
 
+const licensePlatePattern = /^[A-Z]{2}[ -]?[0-9]{1,2}[ -]?[A-Z]{1,3}[ -]?[0-9]{1,4}$/i;
+
 const coordinatesSchema = Joi.object({
     type: Joi.string().valid('Point').default('Point'),
     coordinates: Joi.array().items(Joi.number().required()).length(2).required(),
@@ -22,7 +24,11 @@ exports.createVehicleSchema = Joi.object({
     model: Joi.string().trim().optional(),
     year: Joi.number().integer().min(1990).max(new Date().getFullYear() + 1).optional(),
     color: Joi.string().trim().optional(),
-    licensePlate: Joi.string().trim().optional(),
+    licensePlate: Joi.string().trim().uppercase().pattern(licensePlatePattern).optional().allow('').messages({
+        'string.pattern.base': 'License plate must be a valid vehicle registration number, for example MH 12 AB 1234.',
+    }),
+    registrationNumber: Joi.string().trim().optional(),
+    registrationExpiryDate: Joi.date().iso().optional().allow(null, ''),
     pricePerDay: Joi.number().positive().required(),
     pricePerHour: Joi.number().positive().optional(),
     location: locationSchema.required(),
@@ -40,7 +46,11 @@ exports.updateVehicleSchema = Joi.object({
     model: Joi.string().trim(),
     year: Joi.number().integer().min(1990).max(new Date().getFullYear() + 1),
     color: Joi.string().trim(),
-    licensePlate: Joi.string().trim(),
+    licensePlate: Joi.string().trim().uppercase().pattern(licensePlatePattern).allow('').messages({
+        'string.pattern.base': 'License plate must be a valid vehicle registration number, for example MH 12 AB 1234.',
+    }),
+    registrationNumber: Joi.string().trim(),
+    registrationExpiryDate: Joi.date().iso().allow(null, ''),
     pricePerDay: Joi.number().positive(),
     pricePerHour: Joi.number().positive().allow(null),
     location: locationSchema,

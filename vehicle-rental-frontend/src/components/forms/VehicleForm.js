@@ -10,6 +10,8 @@ const emptyState = {
   year: '',
   color: '',
   licensePlate: '',
+  registrationNumber: '',
+  registrationExpiryDate: '',
   pricePerDay: '',
   seats: '5',
   transmission: 'automatic',
@@ -32,6 +34,8 @@ const toFormState = (vehicle) => ({
   year: vehicle?.year ? String(vehicle.year) : '',
   color: vehicle?.color || '',
   licensePlate: vehicle?.licensePlate || '',
+  registrationNumber: vehicle?.registrationNumber || '',
+  registrationExpiryDate: vehicle?.registrationExpiryDate ? vehicle.registrationExpiryDate.slice(0, 10) : '',
   pricePerDay: vehicle?.pricePerDay ? String(vehicle.pricePerDay) : '',
   seats: vehicle?.seats ? String(vehicle.seats) : '5',
   transmission: vehicle?.transmission || 'automatic',
@@ -55,11 +59,13 @@ export default function VehicleForm({
 }) {
   const [formData, setFormData] = useState(initialData ? toFormState(initialData) : emptyState);
   const [selectedImages, setSelectedImages] = useState([]);
+  const [licenseDocument, setLicenseDocument] = useState(null);
   const [newImagePreviews, setNewImagePreviews] = useState([]);
 
   useEffect(() => {
     setFormData(initialData ? toFormState(initialData) : emptyState);
     setSelectedImages([]);
+    setLicenseDocument(null);
   }, [initialData]);
 
   useEffect(() => {
@@ -99,6 +105,10 @@ export default function VehicleForm({
     setSelectedImages((prev) => prev.filter((_, index) => index !== indexToRemove));
   };
 
+  const handleLicenseDocumentChange = (event) => {
+    setLicenseDocument(event.target.files?.[0] || null);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -111,12 +121,15 @@ export default function VehicleForm({
       year: formData.year ? Number(formData.year) : undefined,
       color: formData.color.trim(),
       licensePlate: formData.licensePlate.trim(),
+      registrationNumber: formData.registrationNumber.trim(),
+      registrationExpiryDate: formData.registrationExpiryDate || undefined,
       pricePerDay: Number(formData.pricePerDay),
       seats: Number(formData.seats),
       transmission: formData.transmission,
       fuelType: formData.fuelType,
       status: formData.status,
       images: selectedImages,
+      licenseDocument,
       location: {
         address: formData.address.trim(),
         city: formData.city.trim(),
@@ -327,8 +340,51 @@ export default function VehicleForm({
             name="licensePlate"
             value={formData.licensePlate}
             onChange={handleChange}
-            placeholder="ABC-1234"
+            placeholder="MH 12 AB 1234"
+            pattern="[A-Za-z]{2}[ -]?[0-9]{1,2}[ -]?[A-Za-z]{1,3}[ -]?[0-9]{1,4}"
+            title="Enter a valid plate, for example MH 12 AB 1234"
           />
+        </div>
+      </div>
+
+      <div className="vehicle-form__grid">
+        <div className="form-group">
+          <label className="form-label" htmlFor="registrationNumber">Registration Number</label>
+          <input
+            id="registrationNumber"
+            type="text"
+            className="form-control"
+            name="registrationNumber"
+            value={formData.registrationNumber}
+            onChange={handleChange}
+            placeholder="Vehicle registration certificate number"
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="registrationExpiryDate">Registration Expiry</label>
+          <input
+            id="registrationExpiryDate"
+            type="date"
+            className="form-control"
+            name="registrationExpiryDate"
+            value={formData.registrationExpiryDate}
+            onChange={handleChange}
+          />
+        </div>
+
+        <div className="form-group">
+          <label className="form-label" htmlFor="licenseDocument">Vehicle License Document</label>
+          <input
+            id="licenseDocument"
+            type="file"
+            className="form-control"
+            accept="image/*"
+            onChange={handleLicenseDocumentChange}
+          />
+          <p className="vehicle-form__helper">
+            {licenseDocument ? licenseDocument.name : 'Upload a vehicle RC/license image for admin review.'}
+          </p>
         </div>
       </div>
 
