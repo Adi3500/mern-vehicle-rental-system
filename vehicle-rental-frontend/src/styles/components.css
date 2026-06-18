@@ -1,0 +1,995 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  border: 1px solid transparent;
+}
+
+.button,
+.icon-button {
+  border: none;
+  cursor: pointer;
+  font: inherit;
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast),
+    color var(--transition-fast),
+    border-color var(--transition-fast);
+}
+
+.button {
+  min-height: 2.9rem;
+  padding: 0.78rem 1.2rem;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  background-color: transparent;
+  color: var(--text-primary);
+  border: 1px solid transparent;
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+}
+
+.button:hover {
+  transform: translateY(-1px);
+}
+
+.button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.button--primary {
+  color: #03111f;
+  background:
+    linear-gradient(135deg, rgba(125, 211, 252, 1), rgba(56, 189, 248, 0.96));
+  box-shadow: 0 14px 28px rgba(14, 165, 233, 0.25);
+}
+
+.button--primary:hover {
+  box-shadow: 0 20px 36px rgba(14, 165, 233, 0.28);
+}
+
+.button--ghost {
+  background-color: rgba(15, 23, 42, 0.72);
+  border-color: rgba(148, 163, 184, 0.18);
+  color: var(--text-primary);
+}
+
+.button--ghost:hover {
+  background-color: rgba(30, 41, 59, 0.92);
+  border-color: rgba(56, 189, 248, 0.28);
+}
+
+.button--light {
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #fde68a;
+  border-color: rgba(245, 158, 11, 0.22);
+}
+
+.button--danger {
+  color: #fecaca;
+  border-color: rgba(248, 113, 113, 0.22);
+  background-color: rgba(127, 29, 29, 0.22);
+}
+
+.button--danger:hover {
+  border-color: rgba(248, 113, 113, 0.36);
+  background-color: rgba(153, 27, 27, 0.32);
+}
+
+.icon-button {
+  width: 2.85rem;
+  height: 2.85rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(15, 23, 42, 0.76);
+  color: var(--text-primary);
+  border: 1px solid rgba(148, 163, 184, 0.14);
+}
+
+.icon-button:hover {
+  background-color: rgba(30, 41, 59, 0.92);
+  box-shadow: var(--shadow-sm);
+}
+
+.user-chip,
+.pill,
+.rating-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border-radius: var(--radius-full);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.user-chip {
+  padding: 0.68rem 0.98rem;
+  background-color: rgba(148, 163, 184, 0.08);
+  color: var(--text-secondary);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.pill {
+  padding: 0.35rem 0.75rem;
+  background-color: rgba(56, 189, 248, 0.12);
+  color: #bae6fd;
+  border: 1px solid rgba(56, 189, 248, 0.14);
+}
+
+.rating-chip {
+  padding: 0.35rem 0.75rem;
+  background-color: rgba(245, 158, 11, 0.12);
+  color: #fde68a;
+  border: 1px solid rgba(245, 158, 11, 0.14);
+}
+
+.badge-success {
+  background-color: rgba(16, 185, 129, 0.12);
+  color: #a7f3d0;
+  border-color: rgba(16, 185, 129, 0.16);
+}
+
+.badge-danger {
+  background-color: rgba(239, 68, 68, 0.14);
+  color: #fecaca;
+  border-color: rgba(239, 68, 68, 0.18);
+}
+
+.badge-warning {
+  background-color: rgba(245, 158, 11, 0.14);
+  color: #fde68a;
+  border-color: rgba(245, 158, 11, 0.18);
+}
+
+.badge-info {
+  background-color: rgba(56, 189, 248, 0.14);
+  color: #bae6fd;
+  border-color: rgba(56, 189, 248, 0.18);
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-toggle {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  min-width: 200px;
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: 1000;
+  display: none;
+}
+
+.dropdown.active .dropdown-menu {
+  display: block;
+}
+
+.dropdown-item {
+  width: 100%;
+  border: none;
+  background: transparent;
+  color: inherit;
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.dropdown-item:hover {
+  background-color: rgba(148, 163, 184, 0.08);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background-color: var(--border-color);
+  margin: 0.5rem 0;
+}
+
+.modal {
+  width: min(100%, 42rem);
+  background:
+    linear-gradient(180deg, rgba(15, 23, 42, 0.98), rgba(15, 23, 42, 0.92));
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-xl);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  padding: var(--spacing-lg);
+  background-color: rgba(2, 6, 23, 0.68);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(12px);
+}
+
+.modal-content {
+  background: rgba(15, 23, 42, 0.98);
+  border-radius: var(--radius-lg);
+  max-width: 600px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-xl);
+}
+
+.modal-header,
+.modal-footer,
+.modal__header,
+.modal__actions {
+  padding: 1rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.modal-header,
+.modal__header {
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-body,
+.modal__body {
+  padding: 1.25rem;
+}
+
+.modal-footer,
+.modal__actions {
+  border-top: 1px solid var(--border-color);
+  justify-content: flex-end;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--text-secondary);
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: rgba(2, 6, 23, 0.96);
+  color: white;
+  text-align: center;
+  border-radius: var(--radius-md);
+  padding: 0.5rem;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+  font-size: var(--font-size-sm);
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+}
+
+.breadcrumb a {
+  color: var(--primary-light);
+}
+
+.breadcrumb a:hover {
+  text-decoration: underline;
+}
+
+.breadcrumb span {
+  color: var(--text-light);
+}
+
+.breadcrumb .active {
+  color: var(--text-secondary);
+}
+
+.skeleton {
+  background:
+    linear-gradient(90deg, rgba(30, 41, 59, 0.8) 25%, rgba(71, 85, 105, 0.46) 50%, rgba(30, 41, 59, 0.8) 75%);
+  background-size: 200% 100%;
+  animation: loading 1.5s infinite;
+}
+
+@keyframes loading {
+  0% {
+    background-position: 200% 0;
+  }
+
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+.skeleton-text {
+  height: 1rem;
+  border-radius: var(--radius-md);
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.tag-input {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.5rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.tag-input input {
+  border: none;
+  outline: none;
+  flex: 1;
+  min-width: 100px;
+  padding: 0.5rem;
+  background: transparent;
+  color: var(--text-primary);
+}
+
+.tag {
+  background-color: var(--primary-color);
+  color: #03111f;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: var(--font-size-sm);
+}
+
+.tag button {
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.file-upload {
+  position: relative;
+  display: inline-block;
+}
+
+.file-upload input {
+  display: none;
+}
+
+.file-upload-label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  border: 2px dashed var(--border-color);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.file-upload-label:hover {
+  border-color: rgba(56, 189, 248, 0.28);
+  background-color: rgba(30, 41, 59, 0.9);
+}
+
+.file-upload.dragover .file-upload-label {
+  border-color: rgba(56, 189, 248, 0.4);
+  background-color: rgba(56, 189, 248, 0.08);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+  flex: 1;
+}
+
+.field span {
+  font-weight: var(--font-weight-medium);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  min-height: 3rem;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  border-radius: 1rem;
+  padding: 0.86rem 1rem;
+  background-color: rgba(8, 15, 29, 0.92);
+  font: inherit;
+  color: var(--text-primary);
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: var(--text-light);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: rgba(56, 189, 248, 0.42);
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+}
+
+.filters-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.filters-panel--compact {
+  gap: var(--spacing-md);
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: var(--spacing-md);
+}
+
+.filters-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-sm);
+}
+
+.catalog-toolbar {
+  margin-bottom: 1.5rem;
+}
+
+.catalog-toolbar__row,
+.catalog-toolbar__actions,
+.table-user-cell,
+.vehicle-gallery__hero,
+.vehicle-gallery__counter,
+.vehicle-gallery__nav,
+.vehicle-detail__price-row,
+.vehicle-detail__host-row,
+.toggle-switch,
+.toggle-switch__track {
+  display: flex;
+  align-items: center;
+}
+
+.catalog-toolbar__row {
+  gap: 1rem;
+}
+
+.catalog-toolbar__search {
+  min-width: 0;
+}
+
+.catalog-toolbar__actions {
+  gap: 0.75rem;
+  margin-left: auto;
+}
+
+.toggle-switch {
+  gap: 0.75rem;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.toggle-switch:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.toggle-switch__track {
+  width: 3.3rem;
+  height: 1.85rem;
+  padding: 0.18rem;
+  justify-content: flex-start;
+  border-radius: 999px;
+  background: rgba(71, 85, 105, 0.62);
+  transition: background-color var(--transition-fast);
+}
+
+.toggle-switch__thumb {
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 50%;
+  background: white;
+  box-shadow: 0 6px 18px rgba(15, 23, 42, 0.24);
+  transition: transform var(--transition-fast);
+}
+
+.toggle-switch.is-on .toggle-switch__track {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.95), rgba(52, 211, 153, 0.9));
+}
+
+.toggle-switch.is-on .toggle-switch__thumb {
+  transform: translateX(1.45rem);
+}
+
+.toggle-switch__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.table-user-cell {
+  gap: 0.9rem;
+}
+
+.table-avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  flex-shrink: 0;
+  border: 2px solid rgba(148, 163, 184, 0.12);
+  background: rgba(15, 23, 42, 0.8);
+}
+
+.table-avatar--vehicle {
+  width: 3.25rem;
+  height: 3.25rem;
+}
+
+.vehicle-gallery {
+  display: grid;
+  gap: 1rem;
+}
+
+.vehicle-gallery__hero {
+  position: relative;
+  min-height: 26rem;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 1.35rem;
+  background: rgba(8, 15, 29, 0.92);
+}
+
+.vehicle-gallery__hero img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vehicle-gallery__nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  justify-content: center;
+  width: 2.9rem;
+  height: 2.9rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(2, 6, 23, 0.72);
+  color: white;
+  cursor: pointer;
+  backdrop-filter: blur(10px);
+}
+
+.vehicle-gallery__nav--prev {
+  left: 1rem;
+}
+
+.vehicle-gallery__nav--next {
+  right: 1rem;
+}
+
+.vehicle-gallery__counter {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  justify-content: center;
+  min-width: 4.4rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
+  background: rgba(2, 6, 23, 0.72);
+  color: white;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  backdrop-filter: blur(10px);
+}
+
+.vehicle-gallery__thumbs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(60px, 72px));
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.vehicle-gallery__dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.vehicle-gallery__dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border: none;
+  border-radius: 999px;
+  background: rgba(148, 163, 184, 0.3);
+  cursor: pointer;
+  transition: transform var(--transition-fast), background-color var(--transition-fast);
+}
+
+.vehicle-gallery__dot.is-active {
+  background: rgba(56, 189, 248, 0.9);
+  transform: scale(1.15);
+}
+
+.vehicle-gallery__thumb {
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: 1rem;
+  overflow: hidden;
+  background: rgba(8, 15, 29, 0.9);
+  cursor: pointer;
+}
+
+.vehicle-gallery__thumb img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  display: block;
+}
+
+.vehicle-gallery__thumb.is-active {
+  border-color: rgba(56, 189, 248, 0.56);
+  box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.1);
+}
+
+.vehicle-detail__hero,
+.vehicle-detail__content,
+.vehicle-detail__facts,
+.vehicle-detail__main-column,
+.vehicle-detail__sidebar,
+.vehicle-detail__booking-card,
+.vehicle-detail__booking-panel,
+.vehicle-detail__host,
+.vehicle-detail__blocked-dates {
+  display: grid;
+}
+
+.vehicle-detail__hero,
+.vehicle-detail__content {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+.vehicle-detail__hero {
+  margin-bottom: 1.5rem;
+  align-items: start;
+}
+
+.vehicle-detail__sidebar,
+.vehicle-detail__main-column,
+.vehicle-detail__booking-card,
+.vehicle-detail__booking-panel,
+.vehicle-detail__host {
+  gap: 1rem;
+}
+
+.vehicle-detail__price-row {
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.vehicle-detail__price-row strong {
+  font-size: clamp(1.8rem, 4vw, 2.35rem);
+  line-height: 1;
+  color: var(--primary-light);
+}
+
+.vehicle-detail__booking-panel {
+  padding-top: 1rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.12);
+}
+
+.vehicle-detail__login-card {
+  display: grid;
+  gap: 1rem;
+}
+
+.vehicle-detail__host-row {
+  gap: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.vehicle-detail__host-row svg {
+  flex-shrink: 0;
+}
+
+.vehicle-detail__facts {
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+}
+
+.vehicle-detail__fact {
+  display: grid;
+  gap: 0.35rem;
+  padding: 1rem;
+  border-radius: 1.1rem;
+  border: 1px solid rgba(148, 163, 184, 0.1);
+  background: rgba(8, 15, 29, 0.64);
+}
+
+.vehicle-detail__fact span {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.vehicle-detail__fact strong {
+  color: var(--text-primary);
+}
+
+.vehicle-detail__blocked-dates {
+  gap: 0.6rem;
+}
+
+.vehicle-detail__reviews {
+  grid-column: 1 / -1;
+}
+
+.vehicle-card.card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.vehicle-card__media {
+  display: block;
+  aspect-ratio: 16 / 10;
+  background:
+    linear-gradient(135deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92));
+}
+
+.vehicle-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.vehicle-card__body {
+  padding: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.vehicle-card__top,
+.vehicle-card__footer,
+.review-card__header,
+.review-card__meta,
+.review-card__actions,
+.booking-summary__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.vehicle-card__title {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-semibold);
+}
+
+.vehicle-card__meta,
+.muted-text,
+.review-card__meta {
+  color: var(--text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.vehicle-card__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.vehicle-card__specs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.vehicle-card__specs span {
+  padding: 0.34rem 0.7rem;
+  border-radius: var(--radius-full);
+  background-color: rgba(148, 163, 184, 0.08);
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.vehicle-card__footer strong {
+  font-size: 1.2rem;
+  color: var(--primary-light);
+}
+
+.vehicle-card__footer > div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3rem;
+}
+
+.review-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.avatar {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+  color: #03111f;
+  font-weight: var(--font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.avatar--small {
+  width: 2.75rem;
+  height: 2.75rem;
+}
+
+.avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.checkout-form__card {
+  padding: 1rem;
+  border: 1px solid rgba(148, 163, 184, 0.14);
+  border-radius: var(--radius-lg);
+  background-color: rgba(8, 15, 29, 0.9);
+}
+
+.pagination__numbers {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination__number {
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  background: rgba(15, 23, 42, 0.9);
+  color: var(--text-primary);
+  font: inherit;
+  cursor: pointer;
+}
+
+.pagination__number.is-active {
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--primary-light), var(--primary-color));
+  color: #03111f;
+  box-shadow: 0 14px 28px rgba(14, 165, 233, 0.26);
+}
+
+.spinner-inline,
+.spinner-page {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.spinner-page {
+  min-height: 50vh;
+  width: 100%;
+  justify-content: center;
+}
+
+.error-state {
+  border-left: 4px solid var(--error-color);
+}
+
+@media (max-width: 768px) {
+  .catalog-toolbar__row,
+  .catalog-toolbar__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .vehicle-card__top,
+  .vehicle-card__footer,
+  .review-card__header,
+  .review-card__actions,
+  .booking-summary__row,
+  .filters-panel__actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .pagination__numbers {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .vehicle-detail__hero,
+  .vehicle-detail__content {
+    grid-template-columns: 1fr;
+  }
+
+  .vehicle-gallery__hero {
+    min-height: 18rem;
+  }
+
+  .modal-backdrop {
+    padding: var(--spacing-md);
+    align-items: flex-end;
+  }
+}

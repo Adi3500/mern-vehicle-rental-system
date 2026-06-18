@@ -1,0 +1,44 @@
+{
+    "name": "vehicle-rental-backend",
+    "version": "1.0.0",
+    "description": "Production-ready Vehicle Rental System Backend (MERN)",
+    "main": "src/app.js",
+    "scripts": {
+        "start": "node src/server.js",
+        "dev": "nodemon src/server.js",
+        "seed": "node src/scripts/seed.js",
+        "seed:delete": "node src/scripts/seed.js --delete",
+        "lint": "eslint src/"
+    },
+    "dependencies": {
+        "bcryptjs": "^2.4.3",
+        "cloudinary": "^1.41.3",
+        "compression": "^1.7.4",
+        "cookie-parser": "^1.4.7",
+        "cors": "^2.8.5",
+        "dotenv": "^16.3.1",
+        "express": "^4.18.2",
+        "express-mongo-sanitize": "^2.2.0",
+        "express-rate-limit": "^7.1.5",
+        "express-validator": "^7.0.1",
+        "helmet": "^7.1.0",
+        "joi": "^17.11.0",
+        "jsonwebtoken": "^9.0.2",
+        "mongoose": "^8.0.3",
+        "morgan": "^1.10.0",
+        "multer": "^1.4.5-lts.1",
+        "multer-storage-cloudinary": "^4.0.0",
+        "nodemailer": "^6.9.7",
+        "stripe": "^14.9.0",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^5.0.0",
+        "winston": "^3.11.0",
+        "xss-clean": "^0.1.4"
+    },
+    "devDependencies": {
+        "eslint": "^8.55.0",
+        "nodemon": "^3.0.2"
+    },
+    "author": "",
+    "license": "ISC"
+}
